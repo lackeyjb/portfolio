@@ -1,10 +1,13 @@
 import express from 'express';
 import morgan from 'morgan';
 import compression from 'compression';
+import forEach from 'lodash/forEach';
 import React from 'react';
+import Helmet from 'react-helmet';
 import { renderToString } from 'react-dom/server';
 import { match, RouterContext } from 'react-router';
 import routes from './src/routes';
+import assets from './webpack-assets.json';
 
 const app = express();
 const PORT = 8080;
@@ -21,12 +24,41 @@ app.get('*', (req, res) => {
       res.redirect(redirect.pathname + redirect.search);
     } else if (props) {
       const appHtml = renderToString(<RouterContext {...props} />);
-      res.send(renderPage(appHtml)); // eslint-disable-line
+      const head = Helmet.rewind();
+      res.send(renderPage(head, appHtml)); // eslint-disable-line
     }
   });
 });
 
-function renderPage(appHtml) {
+function configAssets() {
+  function injectJs() {
+    let js = '';
+    // iterate through scripts in correct order
+    Object.keys(assets).reverse().forEach((key) => {
+      if (assets[key].hasOwnProperty('js')) {
+        js += `<script src="${assets[key].js}"></script>\n`;
+      }
+    });
+    return js;
+  }
+
+  function injectCss() {
+    let css = '';
+    forEach(assets, (value) => {
+      if (value.hasOwnProperty('css')) {
+        css += `<link rel="stylesheet" src="${value.css}">\n`;
+      }
+    });
+    return css;
+  }
+
+  return {
+    injectJs,
+    injectCss,
+  };
+}
+
+function renderPage(head, appHtml) {
   return `
   <!DOCTYPE html public="storage">
   <!--[if lt IE 7 ]> <html lang="en" class="ie6" > <![endif]-->
@@ -36,17 +68,15 @@ function renderPage(appHtml) {
   <!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="" > <!--<![endif]-->
   <head>
   <meta charset="utf-8">
-  <title>Bryan Lackey</title>
+  <title>${head.title}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.0.15/css/bulma.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-  <link href="styles.css" rel="stylesheet">
+  ${configAssets().injectCss()}
   </head>
   <body>
   <div id="app">${appHtml}</div>
-  <script src="manifest.js"></script>
-  <script src="vendor.js"></script>
-  <script src="src.js"></script>
+  ${configAssets().injectJs()}
   </body>
   </html>
   `;

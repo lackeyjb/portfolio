@@ -4,6 +4,7 @@ const merge = require('webpack-merge');
 const webpack = require('webpack');
 const Clean = require('clean-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const AssetsPlugin = require('assets-webpack-plugin');
 
 const pkg = require('./package.json');
 
@@ -33,7 +34,10 @@ const common = {
       test: /\.(png|jpg)$/,
       loader: 'url?limit=25000'
     }]
-  }
+  },
+  plugins: [
+    new AssetsPlugin({ fullPath: false, prettyPrint: true })
+  ]
 };
 
 if (TARGET === 'start:dev' || !TARGET) {
@@ -75,7 +79,8 @@ if (TARGET === 'build:client') {
     },
     output: {
       path: PATHS.build,
-      filename: '[name].js',
+      filename: '[name].[chunkhash].js',
+      chunkFilename: '[chunkhash].js'
     },
     module: {
       loaders: [{
@@ -88,7 +93,7 @@ if (TARGET === 'build:client') {
       new Clean([PATHS.build], {
         verbose: false
       }),
-      new ExtractTextPlugin('styles.css'),
+      new ExtractTextPlugin('styles.[chunkhash].css'),
       new webpack.optimize.CommonsChunkPlugin({
         names: ['vendor', 'manifest']
       }),
