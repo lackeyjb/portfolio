@@ -7,7 +7,7 @@ import { match, RouterContext } from 'react-router';
 import routes from './src/routes';
 
 const app = express();
-const PORT = process.env.PORT || 8080;
+const PORT = 8080;
 
 app.use(morgan('dev'));
 app.use(compression());
