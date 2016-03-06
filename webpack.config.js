@@ -2,7 +2,6 @@
 const path = require('path');
 const merge = require('webpack-merge');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Clean = require('clean-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
@@ -19,7 +18,7 @@ process.env.BABEL_ENV = TARGET;
 const common = {
   entry: PATHS.src,
   resolve: {
-    extensions: ['', '.js', '.jsx']
+    extensions: ['', '.js']
   },
   output: {
     path: PATHS.build,
@@ -27,26 +26,17 @@ const common = {
   },
   module: {
     loaders: [{
-      test: /.jsx?$/,
+      test: /.js$/,
       loaders: ['babel?cacheDirectory'],
       include: PATHS.src
     }, {
       test: /\.(png|jpg)$/,
       loader: 'url?limit=25000'
     }]
-  },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: './index.ejs',
-      title: 'Bryan Lackey',
-      mobile: true,
-      appMountId: 'app',
-      inject: false
-    })
-  ]
+  }
 };
 
-if (TARGET === 'start' || !TARGET) {
+if (TARGET === 'start:dev' || !TARGET) {
   module.exports = merge(common, {
     devtool: 'eval-source-map',
     devServer: {
@@ -75,7 +65,7 @@ if (TARGET === 'start' || !TARGET) {
   });
 }
 
-if (TARGET === 'build') {
+if (TARGET === 'build:client') {
   module.exports = merge(common, {
     entry: {
       src: PATHS.src,
@@ -85,8 +75,7 @@ if (TARGET === 'build') {
     },
     output: {
       path: PATHS.build,
-      filename: '[name].[chunkhash].js',
-      chunkFilename: '[chunkhash].js'
+      filename: '[name].js',
     },
     module: {
       loaders: [{
@@ -99,7 +88,7 @@ if (TARGET === 'build') {
       new Clean([PATHS.build], {
         verbose: false
       }),
-      new ExtractTextPlugin('styles.[chunkhash].css'),
+      new ExtractTextPlugin('styles.css'),
       new webpack.optimize.CommonsChunkPlugin({
         names: ['vendor', 'manifest']
       }),
