@@ -44,7 +44,7 @@ function configAssets() {
     let css = '';
     forEach(assets, (value) => {
       if (value.hasOwnProperty('css')) {
-        css += `<link rel="stylesheet" src="${value.css}">\n`;
+        css += `<link rel="stylesheet" href="${value.css}">\n`;
       }
     });
     return css;
