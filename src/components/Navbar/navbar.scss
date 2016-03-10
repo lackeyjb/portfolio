@@ -1,0 +1,12 @@
+@media screen and (max-width: 768px) {
+  .header-menu{
+    width: 100%;
+    .header-item {
+      padding: 0;
+      a {
+        width: 100%;
+        padding: 10px;
+      }
+    }
+  }
+}

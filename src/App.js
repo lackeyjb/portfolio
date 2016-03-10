@@ -7,7 +7,9 @@ export const App = ({ children }) => (
   <div>
     <Helmet titleTemplate="Bryan Lackey | %s" />
     <Navbar />
-    {children}
+    <main>
+      {children}
+    </main>
     <Footer content={config.footer.content} />
   </div>
 );

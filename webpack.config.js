@@ -3,6 +3,7 @@ const path = require('path');
 const merge = require('webpack-merge');
 const webpack = require('webpack');
 const Clean = require('clean-webpack-plugin');
+const HtmlWepackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const AssetsPlugin = require('assets-webpack-plugin');
 
@@ -64,6 +65,13 @@ if (TARGET === 'start:dev' || !TARGET) {
       }]
     },
     plugins: [
+      new HtmlWepackPlugin({
+        template: 'index.html',
+        title: 'Bryan Lackey',
+        mobile: true,
+        appMountId: 'app',
+        inject: false
+      }),
       new webpack.HotModuleReplacementPlugin()
     ]
   });

@@ -1,3 +1,7 @@
-.m-t-15 {
-  margin-top: 25px;
+@import "_global";
+@import "../components/Navbar/navbar";
+@import "../components/Footer/footer";
+
+html {
+  background: #fff;
 }

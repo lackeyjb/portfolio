@@ -3,3 +3,4 @@ node_modules
 .DS_Store
 build/
 server.bundle.js
+webpack-assets.json

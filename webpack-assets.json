@@ -1,12 +1,5 @@
 {
-  "src": {
-    "js": "src.93e3b292612d693157f4.js",
-    "css": "styles.93e3b292612d693157f4.css"
-  },
-  "vendor": {
-    "js": "vendor.28a71627a000823d84c3.js"
-  },
-  "manifest": {
-    "js": "manifest.b03eafc6ce5c1be0b560.js"
+  "main": {
+    "js": "main.js"
   }
 }
