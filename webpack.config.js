@@ -93,7 +93,7 @@ if (TARGET === 'build:client') {
     module: {
       loaders: [{
         test: /(\.css|\.scss)$/,
-        loader: ExtractTextPlugin.extract('style', 'css', 'sass'),
+        loader: ExtractTextPlugin.extract('style', 'css!sass'),
         include: PATHS.src
       }]
     },

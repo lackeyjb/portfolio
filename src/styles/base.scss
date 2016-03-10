@@ -1,6 +1,6 @@
-@import "_global.scss";
-@import "../components/Navbar/navbar.scss";
-@import "../components/Footer/footer.scss";
+@import "./_global";
+@import "../components/Navbar/navbar";
+@import "../components/Footer/footer";
 
 html {
   background: #fff;
